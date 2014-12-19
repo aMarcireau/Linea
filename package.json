@@ -17,6 +17,6 @@
   },
   "homepage": "https://github.com/aMarcireau/Linea",
   "dependencies": {
-    "express": "^4.10.6"
+    "sails": "^0.10.5"
   }
 }
