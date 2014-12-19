@@ -1,0 +1,23 @@
+{
+  "name": "Linea",
+  "version": "1.0.0",
+  "description": "Linea API",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aMarcireau/Linea.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/aMarcireau/Linea/issues"
+  },
+  "homepage": "https://github.com/aMarcireau/Linea",
+  "dependencies": {
+    "sails": "^0.10.5",
+    "sails-mongo": "^0.10.4"
+  }
+}
