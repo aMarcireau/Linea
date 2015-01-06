@@ -1,0 +1,149 @@
+{
+  "data": {
+    "account": [],
+    "circle": [],
+    "event": [],
+    "transaction": [],
+    "user": []
+  },
+  "schema": {
+    "account": {
+      "user": {
+        "type": "integer",
+        "model": "user",
+        "foreignKey": true,
+        "alias": "user"
+      },
+      "circle": {
+        "type": "integer",
+        "model": "circle",
+        "foreignKey": true,
+        "alias": "circle"
+      },
+      "amount": {
+        "type": "float",
+        "defaultsTo": 0
+      },
+      "id": {
+        "type": "integer",
+        "autoIncrement": true,
+        "primaryKey": true,
+        "unique": true
+      },
+      "createdAt": {
+        "type": "datetime"
+      },
+      "updatedAt": {
+        "type": "datetime"
+      }
+    },
+    "circle": {
+      "name": {
+        "type": "string",
+        "unique": true
+      },
+      "id": {
+        "type": "integer",
+        "autoIncrement": true,
+        "primaryKey": true,
+        "unique": true
+      },
+      "createdAt": {
+        "type": "datetime"
+      },
+      "updatedAt": {
+        "type": "datetime"
+      }
+    },
+    "event": {
+      "lender": {
+        "type": "integer",
+        "model": "user",
+        "foreignKey": true,
+        "alias": "lender"
+      },
+      "circle": {
+        "type": "integer",
+        "model": "circle",
+        "foreignKey": true,
+        "alias": "circle"
+      },
+      "amount": {
+        "type": "float"
+      },
+      "id": {
+        "type": "integer",
+        "autoIncrement": true,
+        "primaryKey": true,
+        "unique": true
+      },
+      "createdAt": {
+        "type": "datetime"
+      },
+      "updatedAt": {
+        "type": "datetime"
+      }
+    },
+    "transaction": {
+      "event": {
+        "type": "integer",
+        "model": "event",
+        "foreignKey": true,
+        "alias": "event"
+      },
+      "borrower": {
+        "type": "integer",
+        "model": "user",
+        "foreignKey": true,
+        "alias": "borrower"
+      },
+      "state": {
+        "type": "string",
+        "enum": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      "id": {
+        "type": "integer",
+        "autoIncrement": true,
+        "primaryKey": true,
+        "unique": true
+      },
+      "createdAt": {
+        "type": "datetime"
+      },
+      "updatedAt": {
+        "type": "datetime"
+      }
+    },
+    "user": {
+      "mail": {
+        "type": "string",
+        "unique": true
+      },
+      "name": {
+        "type": "string"
+      },
+      "id": {
+        "type": "integer",
+        "autoIncrement": true,
+        "primaryKey": true,
+        "unique": true
+      },
+      "createdAt": {
+        "type": "datetime"
+      },
+      "updatedAt": {
+        "type": "datetime"
+      }
+    }
+  },
+  "counters": {
+    "account": {},
+    "circle": {},
+    "event": {},
+    "transaction": {},
+    "user": {}
+  }
+}
