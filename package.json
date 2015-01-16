@@ -23,7 +23,8 @@
         "grunt-contrib-less": "0.11.1",
         "grunt-contrib-coffee": "~0.10.1",
         "sails-mongo": "0.10.5",
-        "bcrypt": "~0.8.0"
+        "bcrypt": "~0.8.0",
+        "crypto-js": "~3.1.2"
     },
     "devDependencies": {
         "barrels": "~1.4.0",
