@@ -7,35 +7,89 @@
 
 module.exports = {
     /**
+     * Create a user
+     */
+    create: function(req, res) {
+        ParameterService.check(req, ['email', 'name', 'password'], function(err, parameters) {
+            if (err) {
+                res.json(err.httpCode, {error: err.message});
+            } else {
+                User.findOneByEmail(parameters.email, function (err, user) {
+                    if (err) {
+                        var err = ErrorService.databaseError();
+                        res.json(err.httpCode, {error: err.message});
+                    } else if (user) {
+                        var err = ErrorService.userAlreadyExists();                        
+                        res.json(err.httpCode, {error: err.message});
+                    } else {
+                        User.create({
+                            email: parameters.email, 
+                            name: parameters.name, 
+                            password: parameters.password,
+                        }).exec(function(err, user) {
+                            if (err) {
+                                var err = ErrorService.databaseError();
+                                res.json(err.httpCode, {error: err.message});
+                            } else {
+                                module.exports.loginManager(parameters.email, parameters.password, function(err, value) {
+                                    if (err) {
+                                        var err = ErrorService.serverError();
+                                        res.json(err.httpCode, {error: err.message});
+                                    } else {
+                                        res.json(200, {token: value});
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
+            }
+        });
+    },
+    /**
      * Login as user
      */
     login: function(req, res) {
-        var bcrypt = require('bcrypt');
-
-        User.findOneByEmail(req.params('email')).done(function (err, user) {
-            if (err) { 
-                res.json({error: 'database error'}, 500);
-            }
+        ParameterService.check(req, ['email', 'password'], function(err, parameters) {
+            if (err) {
+                res.json(err.httpCode, {error: err.message});
+            } else {
+                module.exports.loginManager(parameters.email, parameters.password, function(err, value) {
+                    if (err) {
+                        res.json(err.httpCode, {error: err.message});
+                    } else {
+                        res.json({token: value}, 200);
+                    }
+                });
+            }   
+        });
+    },
+    /**
+     * Login logic
+     *
+     * callback(err, token)
+     */
+    loginManager: function(email, password, callback) {
+        User.findOneByEmail(email, function (err, user) {
+            if (err) return callback(ErrorService.databaseError());
 
             if (user) {
-                bcrypt.compare(req.body.password, user.password, function (err, match) {
-                    if (err) { 
-                        res.json({ error: 'server error' }, 500);
-                    }
+                require('bcrypt').compare(password, user.password, function (err, match) {
+                    if (err) return callback(ErrorService.databaseError());
 
                     if (match) {
-                        req.session.user = user.email;
-                        res.json(user);
+                        TokenService.create(user, function(err, value) {
+                            if (err) return callback(err);
+
+                            return callback(null, value);
+                        });
                     } else {
-                        if (req.session.user) {
-                            req.session.user = null;
-                        }
-                        res.json({ error: 'invalid password' }, 400);
+                        return callback(ErrorService.invalidPassword()); 
                     }
                 });
             } else {
-                res.json({ error: 'User not found' }, 404);
+                return callback(ErrorService.userNotFound());
             }
         });
-    }
+    },
 };

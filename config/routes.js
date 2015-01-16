@@ -23,4 +23,5 @@
 module.exports.routes = {
     '/': {view: 'homepage'},
     'post /user/create': 'UserController.create',
+    'post /login': 'UserController.login',
 };
