@@ -10,8 +10,14 @@
  */
 
 module.exports.bootstrap = function(cb) {
-
-  // It's very important to trigger this callback method when you are finished
-  // with the bootstrap!  (otherwise your server will never lift, since it's waiting on the bootstrap)
-  cb();
+    Token.native(function (err, collection) {
+        collection.ensureIndex({'createdAt': 1}, {expireAfterSeconds: 3600}, function(err, result) {
+            if (err) {
+                console.log('Error occured while ensuring index for Token')
+                console.log(err);
+            } else {
+                cb();
+            }
+        });
+    });
 };
