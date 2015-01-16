@@ -33,21 +33,23 @@ module.exports = {
 			collection: 'Transaction',
 			via: 'borrower',
 		},
+        token: {
+            model: 'Token',
+        },
     },
-    beforeCreate: function(attrs, next) {
-    	var bcrypt = require('bcrypt');
+    beforeCreate: function(user, cb) {
+    	module.exports.beforeUpdate(user, cb);
+  	},
+    beforeUpdate: function(user, cb) {
+        var bcrypt = require('bcrypt');
 
-   		bcrypt.genSalt(10, function(err, salt) {
-      		if (err) { 
-      			return next(err);
-      		}
-			bcrypt.hash(attrs.password, salt, function(err, hash) {
-        		if (err) { 
-        			return next(err);
-        		}
-        		attrs.password = hash;
-        		next();
-      		});
-    	});
-  	}
+        bcrypt.genSalt(10, function(err, salt) {
+            if (err) return cb(err);
+            bcrypt.hash(user.password, salt, function(err, hash) {
+                if (err) return cb(err);
+                user.password = hash;
+                cb();
+            });
+        });
+    }
 };

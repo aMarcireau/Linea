@@ -19,5 +19,9 @@ module.exports = {
 			type: 'string',
 	    	enum: ['enabled', 'disabled'],
 		},
+		amount: {
+			type: 'float',
+			required: true,
+		},
     },
 };

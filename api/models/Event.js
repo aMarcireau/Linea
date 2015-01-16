@@ -19,8 +19,8 @@ module.exports = {
 			model: 'Circle',
 			required: true,
 		},
-		amount: {
-			type: 'float',
+		description: {
+			type: 'string',
 			required: true,
 		},
     },
